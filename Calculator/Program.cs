@@ -6,7 +6,19 @@ namespace Calculator
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            try
+            {
+                Calculator calculator = new Calculator();
+                string str = Console.ReadLine();
+
+                double value = calculator.calculation(str);
+
+                Console.WriteLine(value);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }
