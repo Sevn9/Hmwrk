@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Calculator
 {
-    class Calculator
+    public class Calculator
     {
         private double result;
         private char symbol;
         private double number1;
         private double number2;
-        public double calculation(string s) {
+        public double Calculation(string s) {
 
             string str = s;          
             

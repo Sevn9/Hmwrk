@@ -11,7 +11,7 @@ namespace Calculator
                 Calculator calculator = new Calculator();
                 string str = Console.ReadLine();
 
-                double value = calculator.calculation(str);
+                double value = calculator.Calculation(str);
 
                 Console.WriteLine(value);
             }

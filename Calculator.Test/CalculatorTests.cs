@@ -6,8 +6,9 @@ namespace Calculator.Test
     public class CalculatorTest
     {
         [TestMethod]
-        public void TestMethod1()
-        {
-        }
-    }
+		public void Sum_2Plus5_7Returned()
+		{
+			
+		}
+	}
 }
