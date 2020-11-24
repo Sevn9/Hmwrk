@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Calculator
 {
+    [ExcludeFromCodeCoverage]
     class Program
     {
         static void Main()
