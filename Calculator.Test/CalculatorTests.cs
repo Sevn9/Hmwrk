@@ -70,30 +70,78 @@ namespace Calculator.Test
 		[TestMethod]
 		public void Div_5div0_ZeroDivisionExceptionReturned()
 		{
+			// arrange
 			var calc = new Calculator();
-			string s = "5/0";
-
+			double a = 5;
+			double b = 0;
 			// act
-			void TmpMethod()
-			{
-				var res = calc.Calculation(s);
-			}
 			// assert
-			Assert.ThrowsException<DivideByZeroException>(TmpMethod);
+			Assert.ThrowsException<DivideByZeroException>(()=> calc.Division(a, b));
 		}
 		[TestMethod]
 		public void Calculation_5Plus3_8Returned()
 		{
 			// arrange
 			var calc = new Calculator();
-			string s = "2+5";
+			string s = "5+3";
 
 			// act
 			var res = calc.Calculation(s);
 
 			// assert
-			Assert.AreEqual(7, res);
+			Assert.AreEqual(8, res);
 
+		}
+		[TestMethod]
+		public void Calculation_5Minus3_2Returned()
+		{
+			// arrange
+			var calc = new Calculator();
+			string s = "5-3";
+
+			// act
+			var res = calc.Calculation(s);
+
+			// assert
+			Assert.AreEqual(2, res);
+
+		}
+		[TestMethod]
+		public void Calculation_5Multiply2_10Returned()
+		{
+			// arrange
+			var calc = new Calculator();
+			string s = "5*2";
+
+			// act
+			var res = calc.Calculation(s);
+
+			// assert
+			Assert.AreEqual(10, res);
+
+		}
+		[TestMethod]
+		public void Calculation_15Devide3_5Returned()
+		{
+			// arrange
+			var calc = new Calculator();
+			string s = "15/3";
+
+			// act
+			var res = calc.Calculation(s);
+
+			// assert
+			Assert.AreEqual(5, res);
+
+		}
+		[TestMethod]
+		public void OutPut()
+		{
+			var calculator = new Calculator();
+			string input = "4 + 8";
+			double result = calculator.Calculation(input);
+			double expected = 12;
+			Assert.AreEqual(expected, result);
 		}
 	}
 }
