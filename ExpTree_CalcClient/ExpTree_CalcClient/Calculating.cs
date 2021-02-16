@@ -7,71 +7,41 @@ using System.Net;
 
 namespace ExpTree_CalcClient
 {
-  class Calculating
+  public class Calculating : ICalculating
   {
-    public async static Task<double> Calculate(Expression Tree)
+    private ICalculating resp;
+    public Calculating(ICalculating resp)
     {
-      ExpVisitor visitorMy = new ExpVisitor();
+      this.resp = resp;
+    }
+    public async Task<double> Calculate(Expression Tree)
+    {
+      ExpVisitor visitorMy = new ExpVisitor(resp);
       visitorMy.Visit(Tree);
       return await visitorMy.Run(Tree);
     }
     public static int chert = 0;
-    public static double GetResponsiPlus(Expression a, Expression b)
+   
+    public double GetPesponsing(double a1, double b1, string oper)
     {
       chert++;
       for (int i = 0; i < chert; i++)
         Console.Write("-");
-      string a1 = a.ToString();
-      string b1 = b.ToString();
-      string oper1 = "%2B";
-      double ans = GetPesponsing(a1, b1, oper1);
-      Console.WriteLine("Считается " + a1.ToString() + " + " + b1.ToString() + " = " + ans);
-      return ans;
-    }
-    public static double GetResponsiMin(Expression a, Expression b)
-    {
-      chert++;
-      for (int i = 0; i < chert; i++)
-        Console.Write("-");
-      string a1 = a.ToString();
-      string b1 = b.ToString();
-      string oper1 = "-";
-      double ans = GetPesponsing(a1, b1, oper1);
-      Console.WriteLine("Считается " + a1.ToString() + " - " + b1.ToString() + " = " + ans);
-      return ans;
-    }
-    public static double GetResponsiDel(Expression a, Expression b)
-    {
-      chert++;
-      for (int i = 0; i < chert; i++)
-        Console.Write("-");
-      string a1 = a.ToString();
-      string b1 = b.ToString();
-      string oper1 = "%2F";
-      double ans = GetPesponsing(a1, b1, oper1);
-      Console.WriteLine("Считается " + a1.ToString() + " / " + b1.ToString() + " = " + ans);
-      return ans;
-    }
-    public static double GetResponsiMult(Expression a, Expression b)
-    {
-      chert++;
-      for (int i = 0; i < chert; i++)
-        Console.Write("-");
-      string a1 = a.ToString();
-      string b1 = b.ToString();
-      string oper1 = "*";
-      double ans = GetPesponsing(a1, b1, oper1);
-      Console.WriteLine("Считается "+ a1.ToString() + " * " + b1.ToString() + " = " + ans);
-      return ans;
-    }
-    public static double GetPesponsing(string a1, string b1, string oper1)
-    {
-
+      string oper1 = "";
+      switch (oper)
+      {
+        case "+": oper1 = "%2B"; break;
+        case "/": oper1 = "%2F"; break;
+        case "*": oper1 = "*"; break;
+        case "-": oper1 = "-"; break;
+        default: throw new ArgumentException();
+      }
       HttpWebRequest proxy = (HttpWebRequest)HttpWebRequest.Create("http://localhost:53881?a=" + a1 + "&b=" + b1 + "&oper=" + oper1 + "");
       var resp = proxy.GetResponse();
       var resp1 = resp.GetResponseStream();
       var read = new StreamReader(resp1);
       var ans = read.ReadToEnd();
+      Console.WriteLine("Считаю на сервере (" + a1.ToString() + oper + b1.ToString() + " = " + ans + ") ");
       return double.Parse(ans);
     }
   }

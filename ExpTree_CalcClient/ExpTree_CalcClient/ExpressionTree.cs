@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace ExpTree_CalcClient
 {
-  class ExpressionTree
+  public class ExpressionTree
   {
     public static Stack<Expression> expList = new Stack<Expression>();//Constant
     public static Stack<ConstantExpression> opExpList = new Stack<ConstantExpression>();//MakeTree
-   
+    
     public static Expression ParsingExpression(char[] exp)
     {
       opExpList.Push(Expression.Constant('('));
@@ -95,10 +95,10 @@ namespace ExpTree_CalcClient
       BinaryExpression result;
       switch (op.Value)
       {
-        case '+': result = Expression.MakeBinary(ExpressionType.Add, Expression.Constant(leftOperand), Expression.Constant(rightOperand), false, typeof(Calculating).GetMethod("GetResponsiPlus")); break;
-        case '-': result = Expression.MakeBinary(ExpressionType.Subtract, Expression.Constant(leftOperand), Expression.Constant(rightOperand), false, typeof(Calculating).GetMethod("GetResponsiMin")); break;
-        case '*': result = Expression.MakeBinary(ExpressionType.Multiply, Expression.Constant(leftOperand), Expression.Constant(rightOperand), false, typeof(Calculating).GetMethod("GetResponsiMult")); break;
-        case '/': result = Expression.MakeBinary(ExpressionType.Divide, Expression.Constant(leftOperand), Expression.Constant(rightOperand), false, typeof(Calculating).GetMethod("GetResponsiDel")); break;
+        case '+': result = Expression.MakeBinary(ExpressionType.Add, leftOperand, rightOperand); break;
+        case '-': result = Expression.MakeBinary(ExpressionType.Subtract, leftOperand, rightOperand); break;
+        case '*': result = Expression.MakeBinary(ExpressionType.Multiply, leftOperand,rightOperand); break;
+        case '/': result = Expression.MakeBinary(ExpressionType.Divide, leftOperand, rightOperand); break;
         default: throw new ArgumentException();
       }
       expList.Push(result);
