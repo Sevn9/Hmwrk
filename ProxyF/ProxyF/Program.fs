@@ -3,6 +3,7 @@ open System.Text.RegularExpressions;
 open System.Net.Http
 open System.Net
 open System.IO
+open FSharp.Data
 
 type AsyncMaybeBuilder () =
   member this.Bind(x, f) =
@@ -18,13 +19,13 @@ type AsyncMaybeBuilder () =
 
 let asyncMaybe = new AsyncMaybeBuilder()
 
-let GetOper op = 
-  match op with
-  | "+" -> "%2B"
-  | "*" -> "*"
-  | "/" -> "%2F"
-  | "-" -> "-"
-  | _ -> ""
+//let GetOper op = 
+//  match op with
+//  | "+" -> "%2B"
+//  | "*" -> "*"
+//  | "/" -> "%2F"
+//  | "-" -> "-"
+//  | _ -> ""
 
 let public StatusCode(responce:HttpWebResponse) = 
   async{
@@ -38,32 +39,44 @@ let public StatusCode(responce:HttpWebResponse) =
           |_ -> None
   }
 
-let private GiveRequest(a,b,oper) =
+//--------------------------------
+let private GiveRequest (s:string) =
   async{
-           let req = HttpWebRequest.Create("http://localhost:53881?a="+a+"&b="+b+"&oper="+oper+"", Method = "GET", ContentType = "text/plain")
-           let rsp = req.GetResponse() :?> HttpWebResponse
-           let! statusAns = StatusCode(rsp)
-           return Some(statusAns)
+      let req = HttpWebRequest.Create(s)
+      let rsp = req.GetResponse() :?> HttpWebResponse
+      //let! statusAns = StatusCode(rsp)     
+      return Some rsp
   }
 
-module Calculator=
-  let public Calculate(a,b,oper)=
-      async{
-      let! result = GiveRequest(a,b,oper)
-      return result
-      }
-
+  //----------------
+//let public Calculate(s:string)=
+//    async{
+//    let url = s.Replace("+", "%2B").Replace("*", "%2A").Replace("/", "%2F")
+//    let! result = GiveRequest url
+///    return Some result
+//    }
+//------------------
+let public Calculate(s:string) =
+  Async.RunSynchronously (asyncMaybe{
+      let url = s.Replace("+", "%2B").Replace("*", "%2A").Replace("/", "%2F")
+      let address = "http://localhost:53881/calculate?expression=" + url
+      let! a = GiveRequest address
+      let! b = StatusCode a
+      return Some b
+  })
 
 let output (result : string option) =
   match result with
       | None -> Console.WriteLine("Bad Request")
       | Some result -> Console.WriteLine(result)
 
+
+let calc calculateFunction expression =
+  calculateFunction expression
+
 [<EntryPoint>]
 let main argv =
-    let a = Console.ReadLine()
-    let op = GetOper(Console.ReadLine())
-    let b = Console.ReadLine()
-    let result = Async.RunSynchronously(Calculator.Calculate(a,b,op))
-    output result.Value
+    let proxyCalc = calc Calculate
+    let expression = proxyCalc (Console.ReadLine())
+    output expression
     0
